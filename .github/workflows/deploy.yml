@@ -34,12 +34,12 @@ jobs:
 
     - name: Verificar existencia de bot.js
       run: |
-        if [ -f "bot.js" ]; then
-          echo "✅ bot.js encontrado"
+        if [ -f "BOT.JS" ]; then
+          echo "✅ BOT.JS encontrado"
         else
-          echo "❌ ERROR: bot.js no encontrado"
+          echo "❌ ERROR: BOT.JS no encontrado"
           exit 1
         fi
 
     - name: Iniciar el bot
-      run: node bot.js
+      run: node BOT.JS
