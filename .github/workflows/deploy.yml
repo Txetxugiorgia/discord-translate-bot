@@ -32,14 +32,8 @@ jobs:
         echo "AZURE_TRANSLATOR_REGION=${{ secrets.AZURE_TRANSLATOR_REGION }}" >> .env
         echo "AZURE_TRANSLATOR_ENDPOINT=${{ secrets.AZURE_TRANSLATOR_ENDPOINT }}" >> .env
 
-    - name: Verificar existencia de bot.js
-      run: |
-        if [ -f "bot.js" ]; then
-          echo "✅ bot.js encontrado"
-        else
-          echo "❌ ERROR: bot.js no encontrado"
-          exit 1
-        fi
+    - name: Mostrar el contenido del .env (sin token)
+      run: cat .env | grep -v "DISCORD_TOKEN"
 
     - name: Iniciar el bot
       run: node bot.js
