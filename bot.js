@@ -2,6 +2,22 @@ require('dotenv').config();
 const { Client, GatewayIntentBits } = require('discord.js');
 const axios = require('axios');
 
+// Verificar que las variables de entorno están cargadas
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
+const AZURE_TRANSLATOR_KEY = process.env.AZURE_TRANSLATOR_KEY;
+const AZURE_TRANSLATOR_REGION = process.env.AZURE_TRANSLATOR_REGION;
+const AZURE_TRANSLATOR_ENDPOINT = process.env.AZURE_TRANSLATOR_ENDPOINT;
+
+if (!DISCORD_TOKEN) {
+    console.error("❌ ERROR: No se encontró DISCORD_TOKEN en .env");
+    process.exit(1);
+}
+if (!AZURE_TRANSLATOR_KEY || !AZURE_TRANSLATOR_REGION || !AZURE_TRANSLATOR_ENDPOINT) {
+    console.error("❌ ERROR: Faltan configuraciones en el .env (Azure Translator)");
+    process.exit(1);
+}
+
+// Configurar el cliente de Discord
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -9,11 +25,6 @@ const client = new Client({
         GatewayIntentBits.MessageContent
     ]
 });
-
-const AZURE_TRANSLATOR_KEY = process.env.AZURE_TRANSLATOR_KEY;
-const AZURE_TRANSLATOR_REGION = process.env.AZURE_TRANSLATOR_REGION;
-const AZURE_TRANSLATOR_ENDPOINT = process.env.AZURE_TRANSLATOR_ENDPOINT;
-const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 
 async function translateText(text, from, to) {
     try {
@@ -30,13 +41,13 @@ async function translateText(text, from, to) {
         );
         return response.data[0].translations[0].text;
     } catch (error) {
-        console.error("Error en la traducción:", error.response ? error.response.data : error.message);
+        console.error("❌ Error en la traducción:", error.response ? error.response.data : error.message);
         return text;
     }
 }
 
 client.on('messageCreate', async (message) => {
-    if (message.author.bot) return;
+    if (message.author.bot) return; // Ignorar mensajes de bots
 
     let detectedLanguage = 'es';
     let targetLanguage = 'it';
@@ -60,7 +71,7 @@ client.on('messageCreate', async (message) => {
 });
 
 client.once('ready', () => {
-    console.log(`Bot conectado como ${client.user.tag}`);
+    console.log(`✅ Bot conectado como ${client.user.tag}`);
 });
 
 client.login(DISCORD_TOKEN);
