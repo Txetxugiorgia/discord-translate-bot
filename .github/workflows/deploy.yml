@@ -32,7 +32,7 @@ jobs:
         echo "AZURE_TRANSLATOR_REGION=${{ secrets.AZURE_TRANSLATOR_REGION }}" >> .env
         echo "AZURE_TRANSLATOR_ENDPOINT=${{ secrets.AZURE_TRANSLATOR_ENDPOINT }}" >> .env
 
-    - name: Mostrar el contenido del .env (sin token)
+    - name: Mostrar contenido de .env (sin mostrar el token)
       run: cat .env | grep -v "DISCORD_TOKEN"
 
     - name: Iniciar el bot
